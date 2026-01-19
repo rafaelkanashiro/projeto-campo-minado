@@ -3,40 +3,66 @@ package br.com.rafaelkanashiro.cm.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.rafaelkanashiro.cm.excecao.ExplosaoException;
+
 public class Campo {
 
 	private final int linha;
 	private final int coluna;
-	
+
 	private boolean aberto = false;
 	private boolean minado = false;
 	private boolean marcado = false;
-	
+
 	private List<Campo> vizinhos = new ArrayList<>();
 
-	
 	Campo(int linha, int coluna) {
 		this.linha = linha;
 		this.coluna = coluna;
 	}
-	
+
 	boolean adicionarVizinho(Campo candidatoVizinho) {
 		boolean linhaDiferente = linha != candidatoVizinho.linha;
 		boolean colunaDiferente = coluna != candidatoVizinho.coluna;
-		
+
 		boolean diagonal = linhaDiferente && colunaDiferente;
-		
+
 		int deltaLinha = Math.abs(linha - candidatoVizinho.linha);
 		int deltaColuna = Math.abs(coluna - candidatoVizinho.coluna);
 		int deltaTotal = deltaLinha + deltaColuna;
-		
-		if(deltaTotal == 1 && !diagonal) {
+
+		if (deltaTotal == 1 && !diagonal) {
 			vizinhos.add(candidatoVizinho);
 			return true;
-		} 
-		else if(deltaTotal == 2 && diagonal) {
+		} else if (deltaTotal == 2 && diagonal) {
 			vizinhos.add(candidatoVizinho);
 			return true;
-		}else return false;
+		} else
+			return false;
+	}
+
+	void alternarMarcacao() {
+		if (!aberto) {
+			marcado = !marcado;
+		}
+	}
+
+	boolean abrir() {
+		if (!aberto && !marcado) {
+			aberto = true;
+
+			if (minado) {
+				throw new ExplosaoException();
+			}
+			
+			if(vizinhancaSegura()) {
+				vizinhos.forEach(v -> v.abrir());
+			}
+			return true;
+		} else return false;
+	}
+
+	boolean vizinhancaSegura() {
+		return vizinhos.stream().noneMatch(v -> v.minado);
 	}
 }
