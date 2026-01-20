@@ -1,5 +1,6 @@
 package br.com.rafaelkanashiro.cm.modelo;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -107,5 +108,95 @@ class CampoTeste {
 		campo.abrir();
 		
 		assertTrue(campo1.isFechado() && campo2.isAberto());
+	}
+	
+	@Test
+	void testarLinha() {
+		assertEquals(3, campo.getLinha());
+	}
+	
+	@Test
+	void testarColuna() {
+		assertEquals(3, campo.getColuna());
+	}
+	
+	@Test
+	void validarFechado() {
+		assertTrue(campo.isFechado());
+	}
+	
+	@Test
+	void validarObjetivoAlcancadoDesvendado() {
+		campo.abrir();
+		assertTrue(campo.objetivoAlcancado());
+	}
+	
+	@Test
+	void validarObjetivoAlcancadoProtegido() {
+		campo.minar();
+		campo.alternarMarcacao();
+		assertTrue(campo.objetivoAlcancado());
+	}
+	
+	@Test
+	void validarObjetivoNaoAlcancado() {
+	    assertFalse(campo.objetivoAlcancado());
+	}
+	
+	@Test
+	void validarCampoMinadoNaoProtegido() {
+	    campo.minar();
+	    assertFalse(campo.objetivoAlcancado());
+	}
+	
+	@Test
+	void validarVizinhosMinados() {
+		Campo campo1 = new Campo(3,4);
+		Campo campo2 = new Campo(3,5);
+		
+		campo.adicionarVizinho(campo1);
+		campo1.adicionarVizinho(campo2);
+		
+		campo2.minar();
+		
+		assertEquals(1, campo1.minasNaVizinhanca());
+	}
+	
+	@Test
+	void validarReiniciar() {
+		campo.abrir();
+		campo.reiniciar();
+		assertFalse(campo.isAberto());
+		
+		campo.minar();
+		campo.alternarMarcacao();
+		campo.reiniciar();
+		assertFalse(campo.isMinado());
+		assertFalse(campo.isAberto());
+	}
+	
+	@Test
+	void validarStringCampoMarcado() {
+		campo.alternarMarcacao();
+		assertEquals("x", campo.toString());
+	}
+	
+	@Test
+	void validarStringVizinhoMinado() {
+		Campo campo1 = new Campo(3,4);
+		campo1.minar();
+		campo.adicionarVizinho(campo1);
+		assertEquals(1, campo.minasNaVizinhanca());
+	}
+	
+	@Test
+	void validarStringCampoAberto() {
+		campo.abrir();
+		assertEquals(" ", campo.toString());
+	}
+	
+	@Test
+	void validarCampoInicial() {
+		assertEquals("?", campo.toString());
 	}
 }
