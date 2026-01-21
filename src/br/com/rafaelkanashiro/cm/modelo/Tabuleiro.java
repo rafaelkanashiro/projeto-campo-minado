@@ -47,4 +47,10 @@ public class Tabuleiro {
 			campos.get(aleatorio).minar();
 		}while(minasArmadas < minas);
 	}
+	
+	public boolean objetivoAlcancado() {
+		return campos.stream().allMatch(c -> c.objetivoAlcancado());
+	}
+	
+	
 }
