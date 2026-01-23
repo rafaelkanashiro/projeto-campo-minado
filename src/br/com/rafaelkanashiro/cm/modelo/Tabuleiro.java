@@ -78,16 +78,22 @@ public class Tabuleiro {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-
 		int i = 0;
-
+		
+		for (int c = 0; c < colunas; c++) {
+			sb.append(c);
+			sb.append(" ");
+		}
+		
+		sb.append("\n");
+		
 		for (int l = 0; l < linhas; l++) {
-
 			for (int c = 0; c < colunas; c++) {
 				sb.append(campos.get(i));
 				sb.append(" ");
 				i++;
 			}
+			sb.append(l);
 			sb.append("\n");
 		}
 		return sb.toString();
