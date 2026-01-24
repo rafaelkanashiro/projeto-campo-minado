@@ -20,6 +20,12 @@ class CampoTeste {
 	}
 	
 	@Test
+	void testarSetAberto() {
+		campo.setAberto(true);
+		assertTrue(campo.isAberto());
+	}
+	
+	@Test
 	void testeValidarCampoVizinho() {
 		Campo vizinho = new Campo(3,4);
 		boolean campoVizinhoVerdadeiro = campo.adicionarVizinho(vizinho);
@@ -198,5 +204,13 @@ class CampoTeste {
 	@Test
 	void validarCampoInicial() {
 		assertEquals("?", campo.toString());
+	}
+	
+	@Test
+	void validarIsFechado() {
+		assertTrue(campo.isFechado());
+		
+		campo.abrir();
+		assertFalse(campo.isFechado());
 	}
 }

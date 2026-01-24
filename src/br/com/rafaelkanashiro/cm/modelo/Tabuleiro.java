@@ -22,6 +22,44 @@ public class Tabuleiro {
 		associarVizinhos();
 		sortearMinas();
 	}
+	
+	public int getColunas() {
+		return colunas;
+	}
+
+	public int getLinhas() {
+		return linhas;
+	}
+
+	public int getMinas() {
+		return minas;
+	}
+
+	public List<Campo> getCampos() {
+		return campos;
+	}
+	
+	public boolean isAberto(int linha, int coluna) {
+	    return campos.stream()
+	        .anyMatch(c ->
+	            c.getLinha() == linha &&
+	            c.getColuna() == coluna &&
+	            c.isAberto()
+	        );
+	}
+	
+	public boolean isMarcado(int linha, int coluna) {
+	    return campos.stream()
+	        .anyMatch(c ->
+	            c.getLinha() == linha &&
+	            c.getColuna() == coluna &&
+	            c.isMarcado()
+	        );
+	}
+	
+	public boolean todosOsCamposEstaoAbertos() {
+		return campos.stream().allMatch(c -> c.isAberto());
+	}
 
 	public void abrir(int linha, int coluna) {
 		try {
@@ -59,11 +97,11 @@ public class Tabuleiro {
 		long minasArmadas = 0;
 		Predicate<Campo> minado = c -> c.isMinado();
 
-		do {
+		while (minasArmadas < minas){
 			int aleatorio = (int) (Math.random() * campos.size());
 			campos.get(aleatorio).minar();
 			minasArmadas = campos.stream().filter(minado).count();
-		} while (minasArmadas < minas);
+		} ;
 	}
 
 	public boolean objetivoAlcancado() {
